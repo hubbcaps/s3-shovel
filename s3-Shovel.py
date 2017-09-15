@@ -1,4 +1,4 @@
-# Script to traverse the AFI Directory structure, syncing the files to S3 and then archiving all loose files
+# Script to traverse the Directory structure, syncing the files to S3 and then archiving all loose files
 
 import os, sys, ast
 import logging
@@ -15,7 +15,7 @@ AWS_SECRET_ACCESS_KEY = ''  # Fill in Secret Access Key or leave blank if using 
 BUCKET_NAME = ''  # Fill in Bucket Name
 REGION_HOST = 's3.us-west-2.amazonaws.com'  # Replace with closest S3 Endpoint to your S3 Region
 
-# These need to be set to the directory you want crawled and shoveled, the archive directory you want the files archived to on the system you'll be shoveling from, and the log file you want splunk to monitor for failures.
+# These need to be set to the directory you want crawled and shoveled, the archive directory you want the files archived to on the system you'll be shoveling from, and the log file you want to monitor for failures.
 SOURCE_DIR = ''  # Set the source directory to search for files to shovel up.
 DEST_DIR = ''  # Set the directory to move the files to after shoveling
 LOG_FILE = ''  # Set the full path to where you want the log file to write to.
@@ -59,8 +59,6 @@ fileList = []
 for( dirpath, dirs, files) in os.walk( SOURCE_DIR ):
     fileList.extend( os.path.join(dirpath, f) for f in files)
 
-# NOTE
-# These two hardcoded paths need to be changed to work with the directories you will have this working against so it can properly strip the top levels out and properly create a relative directory in the S3 Bucket.
 # Here we chew up the Absolute Paths into relative paths easily appened to s3 bucket names so as to create a nice directory structure
 uploadFiles = [s.replace(SOURCE_DIR, '') for s in fileList]
 
